@@ -1,6 +1,6 @@
 {
   "name": "tsx5",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "TSX + HTML5 minimal library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,6 +8,7 @@
     "generate": "node scripts/generateRoutes.js",
     "build": "tsc --project tsconfig.json",
     "clean": "rm -rf dist",
+    "pack": "npm run build && npm pack",
     "prepublishOnly": "npm run clean && npm run build"
   },
   "devDependencies": {
@@ -22,6 +23,13 @@
     "framework",
     "html5"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SrJohnathan/tsx5.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SrJohnathan/tsx5/issues"
+  },
   "author": "Antonio Johnathan",
   "license": "MIT"
 }

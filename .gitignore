@@ -23,3 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 /yarn.lock
+/tsx5-0.0.1.tgz

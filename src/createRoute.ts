@@ -1,9 +1,6 @@
 import {createElement,Fragment} from "./jsx-runtime";
 import {matchRoute, parseRoutePath} from "./matchRoute";
 
-(globalThis as any).createElement = createElement;
-(globalThis as any).Fragment = Fragment;
-
 
 export const render = (root:HTMLElement) => {
     const { renderCurrentRoute } = createRouter();

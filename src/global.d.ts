@@ -1,6 +1,6 @@
 // global.d.ts
 
-import { createElement as ce, Fragment as F } from "./framework/jsx-runtime";
+import { createElement as ce, Fragment as F } from "./jsx-runtime";
 
 
 declare global {

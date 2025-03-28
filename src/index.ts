@@ -1,6 +1,13 @@
 // src/index.ts
 
-export { createElement, Fragment } from "./jsx-runtime";
+
+import { createElement, Fragment  } from "./jsx-runtime";
+
+
+(globalThis as any).createElement = createElement;
+(globalThis as any).Fragment = Fragment;
+
+export { createElement, Fragment ,useRef } from "./jsx-runtime";
 export { useState, useEffect } from "./state";
 export { matchRoute } from "./matchRoute";
 export {  render , useNavigation } from "./createRoute";

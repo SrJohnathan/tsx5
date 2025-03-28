@@ -9,7 +9,7 @@ export function createElement(tag: any, props: any, ...children: any[]): HTMLEle
         // Atribui propriedades simples (ex: class, id)
         if (props) {
             Object.keys(props).forEach(key => {
-                if (key === 'children') return;
+                if (key === 'children' || key === 'ref') return;
                 if (key.startsWith("on") && typeof props[key] === "function") {
                     // Converte "onClick" em "click", por exemplo
                     const eventName = key.slice(2).toLowerCase();
@@ -20,6 +20,10 @@ export function createElement(tag: any, props: any, ...children: any[]): HTMLEle
                     element.setAttribute(key, props[key]);
                 }
             });
+        }
+
+        if (props && props.ref) {
+            props.ref.current = element;
         }
 
         // Usa useEffect para monitorar alterações nos children e atualizar o elemento
@@ -57,4 +61,9 @@ function appendChildren(parent: Node, children: any[]) {
 // Implementação simples de Fragment (apenas retorna os filhos)
 export function Fragment(props: { children: any }) {
     return props.children;
+}
+
+
+export function useRef<T>(initialValue: T | null = null) {
+    return { current: initialValue };
 }
