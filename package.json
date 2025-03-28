@@ -1,6 +1,6 @@
 {
-  "name": "tsx5",
-  "version": "0.0.17",
+  "name": "tsx5-base",
+  "version": "0.0.1",
   "description": "TSX + HTML5 minimal library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,8 @@
     "build": "tsc --project tsconfig.json",
     "clean": "rm -rf dist",
     "pack": "npm run build && npm pack",
-    "prepublishOnly": "npm run clean && npm run build"
+    "prepublishOnly": "npm run build",
+    "publish": "npm publish --access=public"
   },
   "devDependencies": {
     "typescript": "^4.9.5",

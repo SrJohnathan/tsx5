@@ -21,14 +21,14 @@ TSX5 é uma biblioteca minimalista que combina a sintaxe TSX com recursos nativo
 Quando publicado no npm, poderá ser instalado via:
 
 ```bash
-npm install tsx5
+npm install tsx5-base
 ```
 
 ## Exemplo Básico
 Exemplo de um componente que usa estado reativo:
 
 ```tsx
-import { createElement, useState, useEffect } from "tsx5";
+import { createElement, useState, useEffect } from "tsx5-base";
 
 function Counter() {
   const [getCount, setCount] = useState(0);
@@ -50,7 +50,7 @@ export default Counter;
 Para renderizar no DOM:
 
 ```tsx 
-import {render} from "tsx5";
+import {render} from "tsx5-base";
 
 const root = document.getElementById("root");
 render(root!)

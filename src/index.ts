@@ -12,3 +12,6 @@ export { useState, useEffect,useEffectDep,useDOMEffect } from "./state";
 export { matchRoute } from "./matchRoute";
 export {  render , useNavigation } from "./createRoute";
 export { createContext  } from "./context-vanilla";
+
+export {Ref} from "./interface/Ref"
+export {ComponentRef ,onFunction} from "./core/ComponentRef"
