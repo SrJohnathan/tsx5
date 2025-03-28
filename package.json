@@ -1,6 +1,6 @@
 {
   "name": "tsx5",
-  "version": "0.0.5",
+  "version": "0.0.10",
   "description": "TSX + HTML5 minimal library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

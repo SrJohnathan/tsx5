@@ -105,3 +105,15 @@ export const useEffect = (fun: () => void): void => {
     targetFunc();
     targetFunc = null;
 };
+
+
+export const useDOMEffect = (fun: () => void): void => {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        // Se o DOM já estiver pronto, executa o efeito reativo
+        useEffect(fun);
+    } else {
+        // Caso contrário, aguarda o DOM carregar e então executa o efeito
+        window.addEventListener("DOMContentLoaded", fun, { once: true });
+    }
+};
+
