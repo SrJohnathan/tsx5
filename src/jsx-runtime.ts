@@ -1,6 +1,6 @@
 // jsx-runtime.ts
 
-import {useEffect} from "./state.ts";
+import {useEffect} from "./state";
 
 export function createElement(tag: any, props: any, ...children: any[]): HTMLElement | Text {
     if (typeof tag === 'string') {
