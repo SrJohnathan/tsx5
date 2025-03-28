@@ -3,6 +3,7 @@
 // Define o tipo para os assinantes (funções que não recebem parâmetros e não retornam nada)
 type Subscriber = () => void;
 
+
 // Variável global para rastrear a função atualmente sendo registrada como dependente
 let targetFunc: (() => void) | null = null;
 
@@ -102,6 +103,25 @@ export const useState = <T>(
  */
 export const useEffect = (fun: () => void): void => {
     targetFunc = fun;
+    targetFunc();
+    targetFunc = null;
+};
+
+
+type   array = () => any
+
+/**
+ * useEffectDep - Executa o efeito somente se o valor retornado pelas funções de dependência mudar.
+ *
+ * @param fun - Função de efeito a ser executada.
+ * @param deps - Array de funções (getters) que retornam os valores de dependência.
+ */
+export const useEffectDep = (fun: () => void, deps: array[]  ): void => {
+    targetFunc = () => {
+
+        Array.isArray(deps) ?  deps.forEach(dep => dep()) : null
+        fun()
+    }
     targetFunc();
     targetFunc = null;
 };

@@ -22,6 +22,14 @@ export function createElement(tag: any, props: any, ...children: any[]): HTMLEle
             });
         }
 
+
+
+        if (props && props.ref) {
+            props.ref.current = element;
+        }
+
+
+
         // Usa useEffect para monitorar alterações nos children e atualizar o elemento
         useEffect(() => {
             // Converte children em um array, caso não seja
