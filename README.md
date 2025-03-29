@@ -1,3 +1,4 @@
+![TSX5 Logo](./logo.svg)
 # TSX5
 
 TSX5 é uma biblioteca minimalista que combina a sintaxe TSX com recursos nativos do HTML5, permitindo criar interfaces reativas e modulares sem depender de frameworks pesados. Ela oferece:
