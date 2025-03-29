@@ -63,7 +63,7 @@ function appendChildren(parent: Node, children: any[]) {
 }
 
 // Implementação simples de Fragment (apenas retorna os filhos)
-export function Fragment(props: { children: any }) {
+export function Fragment(props: { children?: any }) {
     return props.children;
 }
 

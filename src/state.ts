@@ -35,29 +35,33 @@ const isObject = (target: any): target is object =>
     typeof target === 'object' && target !== null;
 
 // Função para copiar as propriedades de 'acc' para 'target'
-const clone = (acc: any, target: any): any => {
-    if (isObject(acc)) {
-        Object.keys(acc).forEach((key) => {
-            // @ts-ignore
-            if (isObject(acc[key])) {
-                // @ts-ignore
-                target[key] = clone(acc[key], target[key]);
-            } else {
-                // @ts-ignore
-                target[key] = acc[key];
-            }
+const clone = (source: any, target: any): any => {
+    if (Array.isArray(source)) {
+        if (!Array.isArray(target)) target = [];
+        source.forEach((item, index) => {
+            target[index] = isObject(item) ? clone(item, target[index]) : item;
         });
+        return target;
+    } else if (isObject(source)) {
+        if (!isObject(target)) target = {};
+        Object.keys(source).forEach((key) => {
+            // @ts-ignore
+            target[key] = isObject(source[key])
+                // @ts-ignore
+                ? clone(source[key], target[key])
+                // @ts-ignore
+                : source[key];
+        });
+        return target;
     } else {
-        target = acc;
+        return source;
     }
-    return target;
 };
 
 // Função privada que retorna o setter para atualizar o state
-const setter = <T>(
-    prx: { data: T },
-    dep: Observer
-) => (data: T | ((prev: T) => T)): void => {
+const setter = <T>(prx: { data: T }, dep: Observer) => (
+    data: T | ((prev: T) => T)
+): void => {
     const result = isFunction(data) ? (data as (prev: T) => T)(prx.data) : data;
     if (isObject(result)) {
         clone(result, prx.data);
@@ -88,9 +92,7 @@ const createOptions = (dep: Observer): ProxyHandler<any> => ({
  *   1. Um getter para obter o valor atual (função que retorna T).
  *   2. Um setter para atualizar o valor (aceita T ou uma função de atualização).
  */
-export const useState = <T>(
-    data: T
-): [() => T, (newValue: T | ((prev: T) => T)) => void] => {
+export const useState = <T>(data: T): [() => T, (newValue: T | ((prev: T) => T)) => void] => {
     const dep = new Observer();
     const prx = new Proxy({ data }, createOptions(dep));
     return [() => prx.data, setter(prx, dep)];
@@ -108,22 +110,30 @@ export const useEffect = (fun: () => void): void => {
 };
 
 
-type   array = () => any
-
 /**
- * useEffectDep - Executa o efeito somente se o valor retornado pelas funções de dependência mudar.
+ * useEffectDep - Executa o efeito somente se os valores retornados pelos getters (dependências)
+ * mudarem em relação à execução anterior.
  *
  * @param fun - Função de efeito a ser executada.
  * @param deps - Array de funções (getters) que retornam os valores de dependência.
  */
-export const useEffectDep = (fun: () => void, deps: array[]  ): void => {
-    targetFunc = () => {
+const effectDeps = new WeakMap<() => void, any[]>();
 
-        Array.isArray(deps) ?  deps.forEach(dep => dep()) : null
-        fun()
+function areDepsEqual(prevDeps: any[], nextDeps: any[]): boolean {
+    if (prevDeps.length !== nextDeps.length) return false;
+    for (let i = 0; i < prevDeps.length; i++) {
+        if (!Object.is(prevDeps[i], nextDeps[i])) return false;
     }
-    targetFunc();
-    targetFunc = null;
+    return true;
+}
+export const useEffectDep = (fun: () => void, deps: Array<() => any>): void => {
+    // Obtém os valores atuais das dependências
+    const currentDeps = deps.map(dep => dep());
+    const prevDeps = effectDeps.get(fun);
+    if (!prevDeps || !areDepsEqual(prevDeps, currentDeps)) {
+        fun();
+        effectDeps.set(fun, currentDeps);
+    }
 };
 
 

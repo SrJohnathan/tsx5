@@ -158,6 +158,8 @@ declare global {
             video: HTMLAttributes<HTMLVideoElement>;
             wbr: HTMLAttributes<HTMLElement>;
 
+            [elem: string]: any;
+
             // Caso queira incluir elementos SVG, adicione aqui
             svg: any;
             circle: any;
