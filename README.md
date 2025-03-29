@@ -17,13 +17,22 @@ TSX5 é uma biblioteca minimalista que combina a sintaxe TSX com recursos nativo
 
 ---
 
-## Instalação
 
-Quando publicado no npm, poderá ser instalado via:
+
+
+
+
+
+## Início Rápido
+Para iniciar um novo projeto com este template TSX5, execute:
 
 ```bash
-npm install tsx5-base
+npx degit SrJohnathan/tsx5-template my-project
+cd my-project
+npm install
+npm run dev
 ```
+
 
 ## Exemplo Básico
 Exemplo de um componente que usa estado reativo:
