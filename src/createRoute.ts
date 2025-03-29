@@ -7,7 +7,10 @@ export const render = (root:HTMLElement) => {
     function renderApp() {
         if (!root) return;
         root.innerHTML = "";
-        root.appendChild(  renderCurrentRoute());
+
+        let elm = renderCurrentRoute()
+        if(elm)
+        root.appendChild( elm );
     }
     window.addEventListener("popstate", renderApp);
 

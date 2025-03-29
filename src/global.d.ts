@@ -11,7 +11,7 @@ declare global {
     namespace JSX {
 
         // Define o tipo dos elementos retornados pelo JSX
-        type Element = HTMLElement | SVGElement | Text | DocumentFragment;
+        type Element = HTMLElement | SVGElement | Text | DocumentFragment | null;
 
         // Interface base para atributos HTML
         interface HTMLAttributes<T> {
@@ -24,6 +24,7 @@ declare global {
             draggable?: boolean;
             hidden?: boolean;
             id?: string;
+            ref?: { current: Element | null} ;
             lang?: string;
             spellCheck?: boolean;
             style?: Partial<CSSStyleDeclaration>;

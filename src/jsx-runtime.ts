@@ -2,7 +2,8 @@
 
 import {useEffect} from "./state";
 
-export function createElement(tag: any, props: any, ...children: any[]): HTMLElement | Text {
+
+export function createElement(tag: any, props: any, ...children: any[]): JSX.Element  {
     if (typeof tag === 'string') {
         const element = document.createElement(tag);
 
@@ -53,6 +54,9 @@ export function createElement(tag: any, props: any, ...children: any[]): HTMLEle
 function appendChildren(parent: Node, children: any[]) {
     children.forEach(child => {
         if (Array.isArray(child)) {
+
+
+
             appendChildren(parent, child);
         } else if (child instanceof Node) {
             parent.appendChild(child);
@@ -63,9 +67,41 @@ function appendChildren(parent: Node, children: any[]) {
 }
 
 // Implementação simples de Fragment (apenas retorna os filhos)
-export function Fragment(props: { children?: any }) {
-    return props.children;
+export function Fragment(props: { children?: any }): DocumentFragment {
+    const fragment = document.createDocumentFragment();
+
+    if (props.children == null) {
+        // Se não houver children, retorna o fragmento vazio
+        return fragment;
+    }
+
+    // Normaliza os children para um array
+    const childrenArray = Array.isArray(props.children) ? props.children : [props.children];
+
+    childrenArray.forEach(child => {
+        if (child instanceof Node) {
+
+
+
+            fragment.appendChild(child);
+        } else if (Array.isArray(child)) {
+            // Se child é um array, processa recursivamente
+            child.forEach(nested => {
+                if (nested instanceof Node) {
+                    fragment.appendChild(nested);
+                } else {
+                    fragment.appendChild(document.createTextNode(String(nested)));
+                }
+            });
+        } else {
+            // Se não for Node, converte para string e cria um TextNode
+            fragment.appendChild(document.createTextNode(String(child)));
+        }
+    });
+
+    return fragment;
 }
+
 
 export function useRef<T>(initialValue: T | null = null) {
     return { current: initialValue };
