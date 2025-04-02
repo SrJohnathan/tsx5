@@ -4,14 +4,13 @@
     "module": "ESNext",
     "outDir": "dist",
     "declaration": true,
+    "declarationDir": "dist",
     "declarationMap": true,
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "jsx": "react",
-    "jsxFactory": "createElement",
-    "jsxFragmentFactory": "Fragment"
+    "moduleResolution": "node"
   },
-  "include": ["src","src/global.d.ts"]
+  "include": ["src", "types"]
 }

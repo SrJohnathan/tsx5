@@ -1,5 +1,6 @@
-import {createElement,Fragment} from "./jsx-runtime";
+import {createElement} from "./jsx-runtime";
 import {matchRoute, parseRoutePath} from "./matchRoute";
+import {TSX5Node} from "./interface/TSX5Node";
 
 
 export const render = (root:HTMLElement) => {
@@ -9,8 +10,19 @@ export const render = (root:HTMLElement) => {
         root.innerHTML = "";
 
         let elm = renderCurrentRoute()
-        if(elm)
-        root.appendChild( elm );
+
+        let layout = get_layout();
+
+        if (layout) {
+            const layoutElm : any = createElement(layout.component, { params: {} })
+            layoutElm.appendChild(elm)
+            root.appendChild( layoutElm as any);
+        }else  {
+            console.log("not layout found")
+            root.appendChild( elm as any);
+        }
+
+
     }
     window.addEventListener("popstate", renderApp);
 
@@ -27,20 +39,34 @@ export const useNavigation = () => {
     }
 
 }
-
-
-
-
-type RouteDefinition = {
+export type RouteDefinition = {
     path: string;
     component: (props?: { params?: Record<string, string> }) => HTMLElement;
 };
 
+export type LayoutDefinition = {
+    component: (props?: { params?: Record<string, string> }) => HTMLElement;
+};
+
+export function get_layout(): LayoutDefinition | null {
+    // @ts-ignore
+    const modules = import.meta.glob("/src/layout.tsx", { eager: true });
+
+    for (const path in modules) {
+        const mod = modules[path] as any;
+        if (mod.default) {
+            return { component: mod.default }; // Retorna o componente do layout
+        }
+    }
+    return null
+}
+
+
+
+
 export function createRouter() {
     // @ts-ignore
     const modules = import.meta.glob("/src/pages/**/*.tsx", { eager: true });
-
-
 
     const routes: RouteDefinition[] = [];
 
@@ -61,7 +87,7 @@ export function createRouter() {
         return null;
     }
 
-    function renderCurrentRoute() {
+    function renderCurrentRoute():TSX5Node {
         const pathname = window.location.pathname.toLowerCase();
         const routeMatch = resolveRoute(pathname);
 

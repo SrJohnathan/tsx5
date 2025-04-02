@@ -1,17 +1,25 @@
 // src/index.ts
 
 
-import { createElement, Fragment  } from "./jsx-runtime";
 
 
-(globalThis as any).createElement = createElement;
-(globalThis as any).Fragment = Fragment;
 
-export { createElement, Fragment ,useRef } from "./jsx-runtime";
+
+
+
+
+export { createElement, Fragment ,useRef ,jsx,jsxs,jsxDEV } from "./jsx-runtime";
 export { useState, useEffect,useEffectDep,useDOMEffect } from "./state";
 export { matchRoute } from "./matchRoute";
 export {  render , useNavigation } from "./createRoute";
-export { createContext  } from "./context-vanilla";
+export { createContext ,useContext } from "./context-vanilla";
 
-export {Ref} from "./interface/Ref"
+export type {Ref} from "./interface/Ref"
+export type {Context,ProviderProps,Box} from "./interface/Context"
+export type {TSX5Node} from "./interface/TSX5Node"
+
+
+
 export {ComponentRef ,onFunction} from "./core/ComponentRef"
+
+

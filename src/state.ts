@@ -1,4 +1,4 @@
-// observer.ts
+// state.ts
 
 // Define o tipo para os assinantes (funções que não recebem parâmetros e não retornam nada)
 type Subscriber = () => void;
@@ -110,13 +110,7 @@ export const useEffect = (fun: () => void): void => {
 };
 
 
-/**
- * useEffectDep - Executa o efeito somente se os valores retornados pelos getters (dependências)
- * mudarem em relação à execução anterior.
- *
- * @param fun - Função de efeito a ser executada.
- * @param deps - Array de funções (getters) que retornam os valores de dependência.
- */
+
 const effectDeps = new WeakMap<() => void, any[]>();
 
 function areDepsEqual(prevDeps: any[], nextDeps: any[]): boolean {
@@ -126,6 +120,14 @@ function areDepsEqual(prevDeps: any[], nextDeps: any[]): boolean {
     }
     return true;
 }
+
+/**
+ * useEffectDep - Executa o efeito somente se os valores retornados pelos getters (dependências)
+ * mudarem em relação à execução anterior.
+ *
+ * @param fun - Função de efeito a ser executada.
+ * @param deps - Array de funções (getters) que retornam os valores de dependência.
+ */
 export const useEffectDep = (fun: () => void, deps: Array<() => any>): void => {
     // Obtém os valores atuais das dependências
     const currentDeps = deps.map(dep => dep());

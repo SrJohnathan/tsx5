@@ -1,4 +1,6 @@
 import {Ref} from "../interface/Ref";
+import {TSX5Node} from "../interface/TSX5Node";
+
 
 /**
  * ComponetRef - Função para criar componentes que suportam ref (similar ao forwardRef do React).
@@ -6,8 +8,8 @@ import {Ref} from "../interface/Ref";
  * @param renderFn - Função que recebe props e uma ref, e retorna um elemento (HTMLElement ou Text)
  * @returns Um componente que aceita props e uma ref opcional.
  */
-export function ComponentRef<P, R>(renderFn: (props: P, ref: Ref<R>) => JSX.Element) {
-    return (props: P & { ref?: Ref<R> }): JSX.Element => {
+export function ComponentRef<P, R>(renderFn: (props: P, ref: Ref<R>) => TSX5Node) {
+    return (props: P & { ref?: Ref<R> }): TSX5Node => {
         // Se uma ref for passada via props, usa-a; caso contrário, cria uma ref padrão com current null
         const ref = props.ref || { current: null };
         return renderFn(props, ref);

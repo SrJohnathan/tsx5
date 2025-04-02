@@ -1,9 +1,31 @@
 // jsx-runtime.ts
 
 import {useEffect} from "./state";
+import {TSX5Node} from "./interface/TSX5Node";
 
 
-export function createElement(tag: any, props: any, ...children: any[]): JSX.Element  {
+
+
+export function jsx(type:any, props:any, key:any) {
+    return createElement(type, props, ...(props.children ? [].concat(props.children) : []));
+
+}
+
+export function jsxs(type:any, props:any, key:any) {
+    const children = Array.isArray(props.children) ? props.children : [props.children];
+    return createElement(type, props, ...children);
+}
+
+export function jsxDEV(type:any, props:any, key:any, isStaticChildren:any, source:any, self:any) {
+    return jsx(type, props, key);
+}
+
+
+
+export function createElement(tag: any, props: any, ...children: TSX5Node[]): TSX5Node {
+
+
+
     if (typeof tag === 'string') {
         const element = document.createElement(tag);
 
@@ -24,12 +46,9 @@ export function createElement(tag: any, props: any, ...children: any[]): JSX.Ele
         }
 
 
-
         if (props && props.ref) {
             props.ref.current = element;
         }
-
-
 
         // Usa useEffect para monitorar alterações nos children e atualizar o elemento
         useEffect(() => {
@@ -45,7 +64,7 @@ export function createElement(tag: any, props: any, ...children: any[]): JSX.Ele
         return element;
     } else if (typeof tag === 'function') {
         // Se 'tag' for uma função, trata-a como um componente e a invoca
-        return tag({ ...props, children });
+        return tag({...props, children});
     } else {
         throw new Error("Tipo de elemento desconhecido: " + tag);
     }
@@ -54,9 +73,6 @@ export function createElement(tag: any, props: any, ...children: any[]): JSX.Ele
 function appendChildren(parent: Node, children: any[]) {
     children.forEach(child => {
         if (Array.isArray(child)) {
-
-
-
             appendChildren(parent, child);
         } else if (child instanceof Node) {
             parent.appendChild(child);
@@ -72,17 +88,15 @@ export function Fragment(props: { children?: any }): DocumentFragment {
 
     if (props.children == null) {
         // Se não houver children, retorna o fragmento vazio
+
+
         return fragment;
     }
-
     // Normaliza os children para um array
     const childrenArray = Array.isArray(props.children) ? props.children : [props.children];
 
     childrenArray.forEach(child => {
         if (child instanceof Node) {
-
-
-
             fragment.appendChild(child);
         } else if (Array.isArray(child)) {
             // Se child é um array, processa recursivamente
@@ -90,11 +104,14 @@ export function Fragment(props: { children?: any }): DocumentFragment {
                 if (nested instanceof Node) {
                     fragment.appendChild(nested);
                 } else {
+
+
                     fragment.appendChild(document.createTextNode(String(nested)));
                 }
             });
         } else {
             // Se não for Node, converte para string e cria um TextNode
+
             fragment.appendChild(document.createTextNode(String(child)));
         }
     });
@@ -104,5 +121,5 @@ export function Fragment(props: { children?: any }): DocumentFragment {
 
 
 export function useRef<T>(initialValue: T | null = null) {
-    return { current: initialValue };
+    return {current: initialValue};
 }

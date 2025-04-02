@@ -1,17 +1,22 @@
 // global.d.ts
 
 import { createElement as ce, Fragment as F } from "./jsx-runtime";
+import {TSX5Node} from "./interface/TSX5Node";
+
+
+
+export type Elm = Element| HTMLElement | SVGElement | null | Text | DocumentFragment | undefined | number | string
 
 
 declare global {
 
-    const createElement: typeof ce;
-    const Fragment: typeof F;
+   const createElement: typeof ce;
+   const Fragment: typeof F;
 
     namespace JSX {
 
         // Define o tipo dos elementos retornados pelo JSX
-        type Element = HTMLElement | SVGElement | Text | DocumentFragment | null;
+        type Element = TSX5Node
 
         // Interface base para atributos HTML
         interface HTMLAttributes<T> {
@@ -184,9 +189,11 @@ declare global {
             tspan: any;
         }
     }
+
+
 }
 export {};
 
-export interface ChangeEvent<T = HTMLInputElement> extends Event {
+export interface ChangeEvent<T extends EventTarget = HTMLInputElement> extends Event {
     target: T;
 }
