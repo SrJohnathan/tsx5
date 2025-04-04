@@ -13,7 +13,7 @@
     "publish": "npm publish --access=public"
   },
   "devDependencies": {
-    "typescript": "^4.9.5",
+    "typescript": "~5.7.2",
     "vite": "^6.2.0"
   },
   "peerDependencies": {

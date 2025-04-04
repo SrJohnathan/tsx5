@@ -2,7 +2,7 @@ import {TSX5Node} from "./TSX5Node";
 
 export interface Context<T> {
     Provider: (props: ProviderProps<T>) => TSX5Node;
-    useContext: () => T;
+    useContext: () =>  { current: T };
     displayName?: string;
 }
 export interface ProviderProps<T> {

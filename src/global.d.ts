@@ -3,7 +3,9 @@
 import { createElement as ce, Fragment as F } from "./jsx-runtime";
 import {TSX5Node} from "./interface/TSX5Node";
 
-
+interface DOMStringMap {
+    [name: string]: string | undefined;
+}
 
 export type Elm = Element| HTMLElement | SVGElement | null | Text | DocumentFragment | undefined | number | string
 
@@ -45,6 +47,7 @@ declare global {
             onKeyDown?: (e: KeyboardEvent) => void;
             onKeyUp?: (e: KeyboardEvent) => void;
 
+            dataset?: DOMStringMap;
             // Permite atributos extras
             [prop: string]: any;
         }

@@ -31,18 +31,28 @@ export function createElement(tag: any, props: any, ...children: TSX5Node[]): TS
 
         // Atribui propriedades simples (ex: class, id)
         if (props) {
-            Object.keys(props).forEach(key => {
-                if (key === 'children' || key === 'ref') return; // Ignora children e ref aqui
-                if (key.startsWith("on") && typeof props[key] === "function") {
-                    // Converte "onClick" em "click", por exemplo
+            const propsKeys = Object.keys(props);
+            for (const key of propsKeys) {
+                if (key === 'children' || key === 'ref') continue;
+                const value = props[key];
+                if (key.startsWith("on") && typeof value === "function") {
                     const eventName = key.slice(2).toLowerCase();
-                    element.addEventListener(eventName, props[key]);
+                    element.addEventListener(eventName, value);
+                } else if (key === "style" && typeof value === "object") {
+                    Object.assign(element.style, value);
                 } else if (key === "className") {
-                    element.setAttribute("class", props[key]);
+                    element.setAttribute("class", value);
+                } else if (key === "dataset" && typeof value === "object") {
+                    Object.assign(element.dataset, value);
+                } else if (key in element) {
+                    (element as any)[key] = value;
                 } else {
-                    element.setAttribute(key, props[key]);
+                    element.setAttribute(key, value);
                 }
-            });
+            }
+
+
+
         }
 
 
@@ -86,38 +96,33 @@ function appendChildren(parent: Node, children: any[]) {
 export function Fragment(props: { children?: any }): DocumentFragment {
     const fragment = document.createDocumentFragment();
 
-    if (props.children == null) {
-        // Se não houver children, retorna o fragmento vazio
-
-
-        return fragment;
-    }
-    // Normaliza os children para um array
-    const childrenArray = Array.isArray(props.children) ? props.children : [props.children];
-
-    childrenArray.forEach(child => {
-        if (child instanceof Node) {
-            fragment.appendChild(child);
-        } else if (Array.isArray(child)) {
-            // Se child é um array, processa recursivamente
-            child.forEach(nested => {
-                if (nested instanceof Node) {
-                    fragment.appendChild(nested);
-                } else {
-
-
-                    fragment.appendChild(document.createTextNode(String(nested)));
-                }
-            });
-        } else {
-            // Se não for Node, converte para string e cria um TextNode
-
-            fragment.appendChild(document.createTextNode(String(child)));
+    useEffect(() => {
+        // Limpa o fragmento
+        while (fragment.firstChild) {
+            fragment.removeChild(fragment.firstChild);
         }
+        // Normaliza os children para um array
+        const childrenArray = Array.isArray(props.children) ? props.children : [props.children];
+        childrenArray.forEach(child => {
+            if (child instanceof Node) {
+                fragment.appendChild(child);
+            } else if (Array.isArray(child)) {
+                child.forEach(nested => {
+                    if (nested instanceof Node) {
+                        fragment.appendChild(nested);
+                    } else {
+                        fragment.appendChild(document.createTextNode(String(nested)));
+                    }
+                });
+            } else if (child !== null && child !== undefined) {
+                fragment.appendChild(document.createTextNode(String(child)));
+            }
+        });
     });
 
     return fragment;
 }
+
 
 
 export function useRef<T>(initialValue: T | null = null) {

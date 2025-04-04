@@ -59,10 +59,10 @@ const clone = (source: any, target: any): any => {
 };
 
 // Função privada que retorna o setter para atualizar o state
-const setter = <T>(prx: { data: T }, dep: Observer) => (
-    data: T | ((prev: T) => T)
+const setter = (prx: { data: any }, dep: Observer) => (
+    data: any | ((prev: any) => any)
 ): void => {
-    const result = isFunction(data) ? (data as (prev: T) => T)(prx.data) : data;
+    const result = isFunction(data) ? (data as (prev: any) => any)(prx.data) : data;
     if (isObject(result)) {
         clone(result, prx.data);
     } else {
@@ -92,10 +92,23 @@ const createOptions = (dep: Observer): ProxyHandler<any> => ({
  *   1. Um getter para obter o valor atual (função que retorna T).
  *   2. Um setter para atualizar o valor (aceita T ou uma função de atualização).
  */
-export const useState = <T>(data: T): [() => T, (newValue: T | ((prev: T) => T)) => void] => {
+export const useState = <T>(data: T  ): [() => T , (newValue: T | ((prev: T ) => T )) => void] => {
     const dep = new Observer();
     const prx = new Proxy({ data }, createOptions(dep));
-    return [() => prx.data, setter(prx, dep)];
+    return [() => prx.data as T, setter(prx, dep)];
+
+};
+
+
+
+
+export const useStateAlt = <T>(data: T): [ T, (newValue: T | ((prev: T) => T)) => void] => {
+    const dep = new Observer();
+    const prx = new Proxy({ data }, createOptions(dep));
+
+
+    const getter = () => prx.data;
+    return [  prx.data, setter(prx, dep)];
 };
 
 /**
