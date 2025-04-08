@@ -3,31 +3,48 @@ import {matchRoute, parseRoutePath} from "./matchRoute";
 import {TSX5Node} from "./interface/TSX5Node";
 
 
-export const render = (root:HTMLElement) => {
+export const render = (root: HTMLElement) => {
     const { renderCurrentRoute } = createRouter();
+
     function renderApp() {
         if (!root) return;
         root.innerHTML = "";
 
-        let elm = renderCurrentRoute()
+        const elm = renderCurrentRoute();
 
-        let layout = get_layout();
-
-        if (layout) {
-            const layoutElm : any = createElement(layout.component, { params: {} })
-            layoutElm.appendChild(elm)
-            root.appendChild( layoutElm as any);
-        }else  {
-            console.log("not layout found")
-            root.appendChild( elm as any);
-        }
-
-
+        root.appendChild(renderToDOM(elm));
     }
+
     window.addEventListener("popstate", renderApp);
 
-    renderApp()
+    renderApp();
+};
 
+function renderToDOM(node: TSX5Node): Node {
+    if (node instanceof Node) {
+        return node;
+    }
+
+    if (typeof node === "string" || typeof node === "number") {
+        return document.createTextNode(String(node));
+    }
+
+    if (Array.isArray(node)) {
+        const fragment = document.createDocumentFragment();
+        node.forEach(n => fragment.appendChild(renderToDOM(n)));
+        return fragment;
+    }
+
+    if (node?.tag === "Fragment") {
+        const fragment = document.createDocumentFragment();
+        for (const child of (node.children as any) || []) {
+            fragment.appendChild(renderToDOM(child));
+        }
+        return fragment;
+    }
+
+    console.error("renderToDOM() recebeu um TSX5Node inválido:", node);
+    return document.createTextNode("[erro ao renderizar]");
 }
 
 export const useNavigation = () => {
@@ -48,25 +65,15 @@ export type LayoutDefinition = {
     component: (props?: { params?: Record<string, string> }) => HTMLElement;
 };
 
-export function get_layout(): LayoutDefinition | null {
+
+
+
+
+export function createRouter(ots: {test:boolean} = {test:false}) {
+
     // @ts-ignore
-    const modules = import.meta.glob("/src/layout.tsx", { eager: true });
+    let modules = import.meta.glob("/src/pages/**/*.tsx", { eager: true });
 
-    for (const path in modules) {
-        const mod = modules[path] as any;
-        if (mod.default) {
-            return { component: mod.default }; // Retorna o componente do layout
-        }
-    }
-    return null
-}
-
-
-
-
-export function createRouter() {
-    // @ts-ignore
-    const modules = import.meta.glob("/src/pages/**/*.tsx", { eager: true });
 
     const routes: RouteDefinition[] = [];
 
@@ -93,7 +100,7 @@ export function createRouter() {
 
 
         if (!routeMatch) {
-            return createElement("div", {}, "404 - Página não encontrada");
+            return createElement("div", {}, "404 - Página não encontrada" as any as  TSX5Node);
         }
         return createElement(routeMatch.component, { params: routeMatch.params });
     }

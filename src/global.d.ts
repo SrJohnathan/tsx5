@@ -7,7 +7,7 @@ interface DOMStringMap {
     [name: string]: string | undefined;
 }
 
-export type Elm = Element| HTMLElement | SVGElement | null | Text | DocumentFragment | undefined | number | string
+export type Elm =  HTMLElement | SVGElement | Text | DocumentFragment | string | number | null;
 
 
 declare global {

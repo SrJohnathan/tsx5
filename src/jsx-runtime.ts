@@ -1,7 +1,8 @@
 // jsx-runtime.ts
 
-import {useEffect} from "./state";
+import {useEffect, useEffectDep} from "./state";
 import {TSX5Node} from "./interface/TSX5Node";
+
 
 
 
@@ -24,6 +25,9 @@ export function jsxDEV(type:any, props:any, key:any, isStaticChildren:any, sourc
 
 export function createElement(tag: any, props: any, ...children: TSX5Node[]): TSX5Node {
 
+    if (typeof document === "undefined") {
+        return { tag, props: props || {}, children : children as any };
+    }
 
 
     if (typeof tag === 'string') {
@@ -65,13 +69,14 @@ export function createElement(tag: any, props: any, ...children: TSX5Node[]): TS
             // Converte children em um array, caso não seja
             const list = Array.isArray(children) ? children : [children];
             // Se algum child for uma função, invoca para obter o valor atual
+            // @ts-ignore
             const res = list.map(child => typeof child === 'function' ? child() : child);
             // Limpa o conteúdo atual e adiciona os novos filhos
             element.innerHTML = '';
             appendChildren(element, res);
         });
 
-        return element;
+        return element as any;
     } else if (typeof tag === 'function') {
         // Se 'tag' for uma função, trata-a como um componente e a invoca
         return tag({...props, children});
@@ -92,35 +97,39 @@ function appendChildren(parent: Node, children: any[]) {
     });
 }
 
-// Implementação simples de Fragment (apenas retorna os filhos)
-export function Fragment(props: { children?: any }): DocumentFragment {
-    const fragment = document.createDocumentFragment();
 
-    useEffect(() => {
-        // Limpa o fragmento
-        while (fragment.firstChild) {
-            fragment.removeChild(fragment.firstChild);
-        }
-        // Normaliza os children para um array
-        const childrenArray = Array.isArray(props.children) ? props.children : [props.children];
-        childrenArray.forEach(child => {
-            if (child instanceof Node) {
-                fragment.appendChild(child);
-            } else if (Array.isArray(child)) {
-                child.forEach(nested => {
-                    if (nested instanceof Node) {
-                        fragment.appendChild(nested);
-                    } else {
-                        fragment.appendChild(document.createTextNode(String(nested)));
-                    }
-                });
-            } else if (child !== null && child !== undefined) {
-                fragment.appendChild(document.createTextNode(String(child)));
-            }
-        });
-    });
 
-    return fragment;
+
+/**
+ * Fragment – Representa um fragmento no TSX5.
+ * Retorna sempre uma estrutura virtual consistente com as propriedades:
+ *   - tag: "Fragment"
+ *   - props: {}
+ *   - children: Array<any>
+ * Opcionalmente, no client, inclui a propriedade _element com um DocumentFragment real.
+ */
+export function Fragment(props: { children?: any }): TSX5Node {
+    // Converte os children para array, mesmo que seja um único elemento
+    const childrenArray = Array.isArray(props.children) ? props.children : [props.children];
+
+    // Se estivermos no client, você pode usar useEffect para efeitos adicionais,
+    // mas não manipule nem retorne um DocumentFragment real.
+    if (typeof document !== "undefined") {
+        useEffectDep(() => {
+            // Aqui você poderia executar efeitos client-side relacionados aos children,
+            // sem alterar o formato do VDOM retornado.
+            // Exemplo: console.log("Fragment atualizado no client", childrenArray);
+            console.debug("Fragment atualizado no client", { children: childrenArray });
+
+        }, [props.children]);
+    }
+
+    // Retorna sempre um objeto VDOM consistente, sem nenhum nó real do DOM
+    return {
+        tag: "Fragment",
+        props: {},
+        children: childrenArray,
+    };
 }
 
 

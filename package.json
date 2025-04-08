@@ -1,24 +1,44 @@
 {
   "name": "tsx5-base",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "TSX + HTML5 minimal library",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "/dist/index.js",
+  "types": "/dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "generate": "node scripts/generateRoutes.js",
-    "build": "tsc --project tsconfig.json",
     "clean": "rm -rf dist",
+    "build": "tsc --project tsconfig.json && copyfiles -u 1 \"src/*.d.ts\" dist",
     "pack": "npm run build && npm pack",
     "prepublishOnly": "npm run build",
-    "publish": "npm publish --access=public"
+    "publish": "npm publish --access=public",
+    "test": "npx jest"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./jsx-runtime": {
+      "import": "./dist/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "import": "./dist/jsx-dev-runtime.js"
+    }
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "copyfiles": "^2.4.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.3.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
   },
-  "peerDependencies": {
-
-  },
+  "peerDependencies": {},
   "keywords": [
     "tsx",
     "framework",
