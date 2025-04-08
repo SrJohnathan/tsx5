@@ -2,7 +2,7 @@ import { Context, ProviderProps } from "./interface/Context";
 import { useState } from "./state";  // Use o useState que retorna [getter, setter]
 import { TSX5Node } from "./interface/TSX5Node";
 // Supondo que você tenha uma implementação de Fragment que retorne um VDOM consistente
-import { Fragment } from "./jsx-runtime";
+import { Fragment } from "../jsx-runtime";
 
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {

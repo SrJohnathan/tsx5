@@ -1,16 +1,15 @@
 {
   "name": "tsx5-base",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "description": "TSX + HTML5 minimal library",
-  "main": "/dist/index.js",
-  "types": "/dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "type": "module",
+  "main": "/index.js",
+  "types": "/index.d.ts",
   "scripts": {
     "generate": "node scripts/generateRoutes.js",
     "clean": "rm -rf dist",
-    "build": "tsc --project tsconfig.json && copyfiles -u 1 \"src/*.d.ts\" dist",
+    "build": "tsc --project tsconfig.json ",
+    "build2": "tsc --project tsconfig.json && copyfiles -u 1 \"src/*.d.ts\" dist",
     "pack": "npm run build && npm pack",
     "prepublishOnly": "npm run build",
     "publish": "npm publish --access=public",
@@ -18,13 +17,13 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js"
+      "import": "./index.js"
     },
     "./jsx-runtime": {
-      "import": "./dist/jsx-runtime.js"
+      "import": "./jsx-runtime.js"
     },
     "./jsx-dev-runtime": {
-      "import": "./dist/jsx-dev-runtime.js"
+      "import": "./jsx-dev-runtime.js"
     }
   },
   "devDependencies": {

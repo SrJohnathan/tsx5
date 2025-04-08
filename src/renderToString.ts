@@ -1,5 +1,5 @@
 
-import {Fragment as TSX5Fragment} from "./jsx-runtime"
+import {Fragment as TSX5Fragment} from "../jsx-runtime"
 /**
  * Converte uma árvore virtual (TSX5Node) em uma string HTML para SSR.
  *

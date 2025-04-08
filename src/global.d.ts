@@ -1,6 +1,6 @@
 // global.d.ts
 
-import { createElement as ce, Fragment as F } from "./jsx-runtime";
+import { createElement as ce, Fragment as F } from "../jsx-runtime";
 import {TSX5Node} from "./interface/TSX5Node";
 
 interface DOMStringMap {

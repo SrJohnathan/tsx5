@@ -7,7 +7,7 @@
     "sourceMap": true,
     "declarationDir": "dist",
     "rootDir": "src",
-    "outDir": "dist",
+   
     "noEmit": false,
     "strict": true,
     "isolatedModules": true,
@@ -16,7 +16,7 @@
     "skipLibCheck": true,
     "noImplicitAny": false
   },
-  "include": ["src"],
+  "include": ["src","/jsx-dev-runtime.ts","/jsx-runtime.ts"],
   "exclude": [
     "**/__tests__/**",
     "**/*.test.ts",

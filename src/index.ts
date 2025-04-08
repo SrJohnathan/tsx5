@@ -5,11 +5,11 @@
 
 
 
-import { createElement, Fragment  } from "./jsx-runtime";
+import { createElement, Fragment  } from "../jsx-runtime";
 (globalThis as any).TSX5 = { createElement, Fragment}
 
 
-export { createElement, Fragment ,useRef ,jsx,jsxs,jsxDEV } from "./jsx-runtime";
+export { createElement, Fragment} from "../jsx-runtime";
 export { useState, useEffect,useEffectDep,useDOMEffect , TSX5Observer ,onlyClient ,useMemo,useStateAlt,createStore,useEffectWithDeps,useClientEffect,batch} from "./state";
 export { matchRoute } from "./matchRoute";
 export {  render , useNavigation } from "./createRoute";

@@ -1,4 +1,4 @@
-import {createElement} from "./jsx-runtime";
+import {createElement} from "../jsx-runtime";
 import {matchRoute, parseRoutePath} from "./matchRoute";
 import {TSX5Node} from "./interface/TSX5Node";
 
