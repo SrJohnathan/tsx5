@@ -389,3 +389,25 @@ export function batch(fn: () => void): void {
         }
     }
 }
+
+
+
+/*export function useStateSocket<T>(initialValue: T, path: string): () =>  T {
+    const [value, setValue] = useState<T>(initialValue);
+
+    if (!isSSR()) {
+        const ws = getOrCreateWebSocket(path);
+
+        const listener = (data: T) => {
+            setValue(data);
+        };
+
+        if (!socketListeners.has(path)) {
+            socketListeners.set(path, new Set());
+        }
+        socketListeners.get(path)!.add(listener);
+    }
+
+    return value
+}*/
+
