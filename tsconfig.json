@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ESNext",
     "module": "ESNext",
+    "lib": ["DOM","DOM.Iterable","ES2020"],
     "moduleResolution": "bundler",
     "declaration": true,
+    "moduleDetection": "force",
     "sourceMap": true,
-    "declarationDir": "dist",
-    "rootDir": "src",
-   
+    "declarationDir": "dist/types",
+
+    "outDir": "dist",
     "noEmit": false,
     "strict": true,
     "isolatedModules": true,
@@ -16,8 +18,10 @@
     "skipLibCheck": true,
     "noImplicitAny": false
   },
-  "include": ["src","/jsx-dev-runtime.ts","/jsx-runtime.ts"],
+  "include": ["src"
+  ],
   "exclude": [
+    "__mocks__",
     "**/__tests__/**",
     "**/*.test.ts",
     "**/*.spec.ts",

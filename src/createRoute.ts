@@ -1,4 +1,4 @@
-import {createElement} from "../jsx-runtime";
+import {createElement} from "./jsx-runtime";
 import {matchRoute, parseRoutePath} from "./matchRoute";
 import {TSX5Node} from "./interface/TSX5Node";
 
@@ -66,7 +66,31 @@ export type LayoutDefinition = {
 };
 
 
+export function createRouterHidrate() {
+    // @ts-ignore
+    let modules = import.meta.glob("/src/pages/**/*.tsx", { eager: true });
 
+    const routes: RouteDefinition[] = [];
+
+    for (const path in modules) {
+        const mod = modules[path] as any;
+        const component = mod.default;
+        const routePath = parseRoutePath(path);
+        routes.push({ path: routePath, component });
+    }
+
+    function resolveRoute(pathname: string) {
+        for (const route of routes) {
+            const { matched, params } = matchRoute(route.path, pathname);
+            if (matched) {
+                return { component: route.component, params };
+            }
+        }
+        return null;
+    }
+
+    return { routes, resolveRoute };
+}
 
 
 export function createRouter(ots: {test:boolean} = {test:false}) {

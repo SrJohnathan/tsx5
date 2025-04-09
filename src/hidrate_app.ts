@@ -1,4 +1,4 @@
-import {createRouter} from "./createRoute";
+import {createRouter, createRouterHidrate} from "./createRoute";
 import {config, logger} from "./logging_configuration";
 import {hydrate} from "./hidrate";
 
@@ -11,44 +11,44 @@ export const hydrateApp: (root: HTMLElement) => {
 } = (root: HTMLElement) => {
     logger.info("Iniciando hidratação da aplicação");
 
-    // Obtém a função que gera a árvore virtual da rota atual
-    const {renderCurrentRoute} = createRouter();
+    // Obtém a rota inicial do SSR injetada pelo servidor
+    const currentPath = window.__ROUTE__ || window.location.pathname.toLowerCase();
 
-    logger.debug("Router criado");
+    const { resolveRoute } = createRouterHidrate();
+    const routeMatch = resolveRoute(currentPath);
 
     function doHydration() {
         logger.info("Executando hidratação");
         if (!root) {
-            logger.error("Elemento raiz não encontrado", {rootValue: root});
+            logger.error("Elemento raiz não encontrado", { rootValue: root });
             return;
         }
 
-
         try {
-            hydrate(root, renderCurrentRoute);
+            const vnode = routeMatch
+                ? createElement(routeMatch.component, { params: routeMatch.params })
+                : createElement("div", {}, "404 - Página não encontrada" as any);
+
+            hydrate(root, () => vnode);
             logger.info("Hidratação concluída com sucesso");
         } catch (error) {
             logger.error("Erro durante hidratação", error);
         }
     }
 
-    // Atualiza a hidratação em caso de navegação (popstate)
     window.addEventListener("popstate", () => {
         logger.debug("Evento popstate detectado");
         doHydration();
     });
 
-    // Executa a hidratação inicial após o carregamento do DOM
     if (document.readyState === 'loading') {
-        logger.debug("DOM ainda carregando, aguardando DOMContentLoaded");
         document.addEventListener('DOMContentLoaded', doHydration);
     } else {
-        logger.debug("DOM já carregado, executando hidratação imediatamente");
         doHydration();
     }
 
     return {
         forceHydration: doHydration,
-        getConfig: () => ({...config})
+        getConfig: () => ({ ...config })
     };
 };

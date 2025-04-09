@@ -1,6 +1,6 @@
 // global.d.ts
 
-import { createElement as ce, Fragment as F } from "../jsx-runtime";
+import { createElement as ce, Fragment as F } from "./jsx-runtime";
 import {TSX5Node} from "./interface/TSX5Node";
 
 interface DOMStringMap {
@@ -11,6 +11,11 @@ export type Elm =  HTMLElement | SVGElement | Text | DocumentFragment | string |
 
 
 declare global {
+
+    interface Window {
+        __ROUTE__?: string;
+        __PARAMS__?: Record<string, string>;
+    }
 
    const createElement: typeof ce;
    const Fragment: typeof F;

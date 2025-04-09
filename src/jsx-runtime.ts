@@ -1,7 +1,7 @@
 // jsx-runtime.ts
 
-import {useEffect, useEffectDep} from "./src/state";
-import {TSX5Node} from "./src/interface/TSX5Node";
+import {useEffect, useEffectDep} from "./state";
+import {TSX5Node} from "./interface/TSX5Node";
 
 
 
