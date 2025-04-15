@@ -1,6 +1,7 @@
 import {createRouter, createRouterHidrate} from "./createRoute";
 import {config, logger} from "./logging_configuration";
 import {hydrate} from "./hidrate";
+import { createElement } from "./jsx-runtime";
 
 /**
  * Define o tipo da função hydrateApp para evitar que tipos externos (como ConfigGlobals) escapem.

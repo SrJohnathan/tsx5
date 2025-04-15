@@ -24,6 +24,14 @@ export function renderToString(node: any): string {
     // Se o nó for um componente (função)
     if (typeof node.tag === 'function') {
         // Se for o Fragment, renderiza apenas os children
+
+        if (node.props?.client === true) {
+            // Client-only: renderizar apenas os children como fallback
+            return renderToString(node.children || node.props?.children);
+        }
+
+
+
         if (
             node.tag === TSX5Fragment ||
             node.tag.name === "Fragment" ||
@@ -31,6 +39,8 @@ export function renderToString(node: any): string {
         ) {
             return renderToString(node.children || node.props?.children);
         }
+
+
         // Caso seja um componente customizado, invoca-o com os props e children
         const componentOutput = node.tag({ ...node.props, children: node.children });
         if (componentOutput === undefined) {

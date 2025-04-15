@@ -1,4 +1,5 @@
 import {TSX5Node} from "../../types";
+import {createElement} from "../jsx-runtime";
 
 export function Column(children: () => TSX5Node[], props: Record<string, any> = {}, style: Partial<CSSStyleDeclaration> = {}): TSX5Node {
     return createElement("div", { ...props, style: { display: "flex", flexDirection: "column", gap: "0.5rem", ...style } }, ...children() as any);

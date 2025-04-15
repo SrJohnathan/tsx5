@@ -21,6 +21,13 @@ export function hydrate(root: HTMLElement, renderFn: () => any): void {
             return;
         }
 
+
+        if (vNode.props?.client && domNode.hasAttribute("data-tsx5-client")) {
+            const realNode = renderToDOM(vNode);
+            domNode.replaceWith(realNode);
+            return;
+        }
+
         // se forem elementos com tags diferentes, recria
         if ((domNode as HTMLElement).tagName?.toLowerCase() !== vNode.tag?.toLowerCase()) {
             const newElm = document.createElement(vNode.tag);

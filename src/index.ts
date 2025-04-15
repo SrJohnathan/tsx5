@@ -22,3 +22,4 @@ export type {Context,ProviderProps,Box} from "./interface/Context"
 export type {TSX5Node} from "./interface/TSX5Node"
 export {ComponentRef ,onFunction} from "./core/ComponentRef"
 
+export * from "./declarative/tsx5-compose"
